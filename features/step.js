@@ -22,15 +22,15 @@ Given('поле {string}', (string) => {
 });
 
 When('ходит игрок {int}',(id) => {
-    game.setCurrentPlayer(id);
+    game.setCurrentPlayerId(id);
 });
 
 let lastResult = {};
 
-When('игрок ходит в клетку {int}, {int}', (x, y) => {
+When('игрок ходит в клетку {int}, {int}', (y, x) => {
     return request(app)
             .post('/move')
-            .send({x,y})
+            .send({y,x})
             .then((res) => {
                 lastResult = res;
             });
@@ -47,5 +47,5 @@ Then('возвращается ошибка', () => {
 });
 
 Then('победил игрок {int}', (playerId) => {
-    assert.equal(playerId, game.getCurrentWinner());
+    assert.equal(playerId, game.getWinner());
 });
