@@ -26,13 +26,11 @@ function isGameContinue() {
 }
 
 function changePlayer(){
-    let id =  getCurrentPlayerId();
-    if( id == 1 ){
-        id = 2;
+    if( getCurrentPlayerId() == 1){
+        setCurrentPlayerId(2);
     } else {
-        id = 1;
+        setCurrentPlayerId(1);
     }
-    return id;
 }
 
 function updateWinners(field){
