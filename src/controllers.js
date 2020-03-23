@@ -7,17 +7,18 @@ function getField() {
 }
 
 function makeMove(x, y) {
-    field[x][y] = game.getCurrentPlayer();
+    field[x][y] = game.getCurrentPlayerId();
     game.updateWinners(field);
+    game.changePlayer();
 }
 
 function reset() {
-    game.setCurrentWinner(0);
+    game.setWinner(0);
     field = [[0,0,0],[0,0,0],[0,0,0]];
 }
 
 function presetField(newField) {
-    game.setCurrentWinner(0);
+    game.setWinner(0);
     field = newField;
 }
 
