@@ -37,9 +37,12 @@ When('игрок ходит в клетку {int}, {int}', (y, x) => {
 });
 
 Then('поле становится {string}', (string) => {
-    let fieldsString = controller.getField().toString().replace(/,/g,""); 
-    assert.equal(fieldsString, string.replace(/\|/g,""));
-    
+    return request(app)
+     .get('/getField')
+     .expect(200)
+     .then((res) => {
+        assert.equal(res.body.toString().replace(/,/g,""), string.replace(/\|/g,""));
+    });
 });
 
 Then('возвращается ошибка', () => {
