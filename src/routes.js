@@ -4,11 +4,11 @@ const game = require('./game');
 
 router.get('/getField', (req, res) => {
     res.status(200).send(controller.getField());
-  });
-  
+});
+
 router.post('/move', (req, res) => {
-    if (controller.ifPlaceFree(req.body.y-1, req.body.x-1) == 'free' && game.isGameContinue() == 'continue' ) {
-        controller.makeMove(req.body.y-1, req.body.x-1);
+    if (controller.ifPlaceFree(req.body.y - 1, req.body.x - 1) == 'free' && game.isGameContinue() == 'continue') {
+        controller.makeMove(req.body.y - 1, req.body.x - 1);
         res.status(200).send('ok');
     } else {
         res.status(400).send('not ok');
