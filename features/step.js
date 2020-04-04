@@ -52,7 +52,7 @@ Then('возвращается ошибка', () => {
 });
 
 Then('победил игрок {int}', (playerId) => {
-    assert.equal(playerId, game.getWinner());
+    assert.equal(playerId, game.getWinnerId());
 });
 
 Then('ничья', () => {
