@@ -1,45 +1,72 @@
 const uuid = require('uuid');
 
-const users = [
-    {
-        id: 1,
-        login: 'max',
-        password: 'qwerty',
-    },
-    {
-        id: 2,
-        login: 'ivan',
-        password: 'ytrewq',
-    },
-];
-
+const users = [];
 const sessions = {};
 
-function checkSession(sessionID) {
+function getUserData(sessionID) {
     return sessions[sessionID];
 }
 
 function authMiddleware(req, res, next) {
-    const userData = checkSession(req.headers.authorization);
+    const userData = getUserData(req.headers.authorization);
     req.userCredentials = userData;
     next();
 }
 
-function checkLogin(login, password) {
-    const user = users.find((element) => element.login === login && element.password === password);
+function restrictedMiddleware(req, res, next) {
+    if (!req.userCredentials) {
+        res.status(401).send();
+    } else {
+        next();
+    }
+}
 
+function checkLogin(login, password) {
+    const statusObj = {
+        statusCode: 401,
+        sessionID: undefined,
+    };
+    const user = users.find((element) => {
+        return element.login === login && element.password === password;
+    });
     if (user) {
         const sessionID = uuid.v4();
         sessions[sessionID] = {
             id: user.id,
         };
-        return sessionID;
+        statusObj.statusCode = 200;
+        statusObj.sessionID = sessionID;
     }
-    return -1;
+    return statusObj;
+}
+
+function register(login, password) {
+    const statusObj = {
+        statusCode: 500,
+        text: 'already registered',
+    };
+    const user = users.find((element) => {
+        return element.login === login && element.password === password;
+    });
+
+    if (!user) {
+        users.push(
+            {
+                id: users.length,
+                login,
+                password,
+            },
+        );
+        statusObj.statusCode = 200;
+        statusObj.text = 'registered';
+    }
+    return statusObj;
 }
 
 module.exports = {
-    checkLogin,
-    checkSession,
     authMiddleware,
+    restrictedMiddleware,
+    register,
+    checkLogin,
+    getUserData,
 };
